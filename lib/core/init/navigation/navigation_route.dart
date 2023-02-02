@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../common/architecture_widgets/not_found_navigation_widget.dart';
 import '../../../feature/control_panel/view/pages/control_panel_page.dart';
 import '../../../feature/menu/view/pages/menu_page.dart';
-import '../../../feature/qr_scanner/view/pages/qr_scanner_page.dart';
+import '../../../feature/control_panel/view/pages/qr_scanner_page.dart';
 import '../../constants/navigation/navigation_constants.dart';
 
 class NavigationRoute {

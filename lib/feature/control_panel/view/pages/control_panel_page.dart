@@ -1,18 +1,14 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_control_app/core/init/lang/locale_keys.dart';
 import 'package:remote_control_app/core/init/logging/logger.dart';
-import 'package:remote_control_app/feature/control_panel/domain/entities/person_entity.dart';
 import 'package:remote_control_app/feature/control_panel/domain/entities/shot_entity.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_bloc.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_state.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_bloc.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_event.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_state.dart';
 import 'package:remote_control_app/feature/control_panel/view/widgets/workspaceWidget.dart';
-
-import '../bloc/request_event.dart';
 
 class ControlPanelPage extends StatefulWidget {
   const ControlPanelPage({super.key});
@@ -68,8 +64,14 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
       return Workspace(
         data: state.previousData,
       );
+    } else if (state is RequestShotErrorState) {
+      return Center(
+        child: Text(state.message),
+      );
     } else {
-      return CircularProgressIndicator();
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     }
   }
 

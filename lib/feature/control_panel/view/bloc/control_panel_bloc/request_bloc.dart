@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_control_app/core/error/failure.dart';
 import 'package:remote_control_app/feature/control_panel/domain/usecases/request_current_shot.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_event.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_state.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_event.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_state.dart';
 
 class RequestShotBloc extends Bloc<RequestShotEvent, RequestShotState> {
   final RequestShotCase requestShotCase;

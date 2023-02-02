@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:remote_control_app/core/init/lang/locale_keys.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_bloc.dart';
-import 'package:remote_control_app/feature/control_panel/view/bloc/request_event.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_bloc.dart';
+import 'package:remote_control_app/feature/control_panel/view/bloc/control_panel_bloc/request_event.dart';
 import 'package:remote_control_app/service_locator.dart';
 import 'package:easy_localization/easy_localization.dart';
 
