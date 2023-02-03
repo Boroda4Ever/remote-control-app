@@ -16,29 +16,20 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Center(
-            child: Column(children: [
-          ElevatedButton(
-              onPressed: () {
-                logger.info('To qr scanner button pressed');
-                sl<NavigationService>().navigateToPage(
-                  path: NavigationConstants.qrScanner,
-                );
-              },
-              child: Text(LocaleKeys.firstMenuButton.tr())),
-          ElevatedButton(
-              onPressed: () {
-                BlocProvider.of<RequestShotBloc>(context)
-                    .add(RequestShotClearLoadEvent());
-                logger.info('To control panel button pressed');
-                sl<NavigationService>().navigateToPage(
-                  path: NavigationConstants.controlPanel,
-                );
-              },
-              child: Text(LocaleKeys.secondMenuButton.tr())),
-        ])),
+        child: Scaffold(
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () {
+              logger.info('To qr scanner button pressed');
+              sl<NavigationService>().navigateToPage(
+                path: NavigationConstants.qrScanner,
+              );
+            },
+            child: Text(
+              LocaleKeys.firstMenuButton.tr(),
+              style: TextStyle(fontSize: 40),
+            )),
       ),
-    );
+    ));
   }
 }

@@ -43,98 +43,18 @@ class _QRScannerPageState extends State<QRScannerPage> {
           if (state is QRScannerStateErrorState) {
             _showSnackBar(state.message);
           } else if (state is QRScannerSuccessfullState) {
-            //_showOtherSnackBar();
             BlocProvider.of<RequestShotBloc>(context)
                 .add(RequestShotClearLoadEvent());
             sl<NavigationService>().navigateToPage(
               path: NavigationConstants.controlPanel,
             );
+            BlocProvider.of<QRScannerBloc>(context)
+                .add(QRScannerCleaningDataEvent());
           }
         },
         child: Column(
           children: <Widget>[
             Expanded(flex: 4, child: _buildQrView(context)),
-            Expanded(
-              flex: 1,
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    if (result != null)
-                      Text(
-                          'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                    else
-                      const Text('Scan a code'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await controller?.toggleFlash();
-                                setState(() {});
-                              },
-                              child: FutureBuilder(
-                                future: controller?.getFlashStatus(),
-                                builder: (context, snapshot) {
-                                  return Text('Flash: ${snapshot.data}');
-                                },
-                              )),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                await controller?.flipCamera();
-                                setState(() {});
-                              },
-                              child: FutureBuilder(
-                                future: controller?.getCameraInfo(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.data != null) {
-                                    return Text(
-                                        'Camera facing ${describeEnum(snapshot.data!)}');
-                                  } else {
-                                    return const Text('loading');
-                                  }
-                                },
-                              )),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.pauseCamera();
-                            },
-                            child: const Text('pause',
-                                style: TextStyle(fontSize: 20)),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(8),
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              await controller?.resumeCamera();
-                            },
-                            child: const Text('resume',
-                                style: TextStyle(fontSize: 20)),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -144,13 +64,13 @@ class _QRScannerPageState extends State<QRScannerPage> {
   Widget _buildQrView(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
-        ? 150.0
+        ? 250.0
         : 300.0;
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
+          borderColor: Colors.grey,
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
@@ -167,21 +87,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
               content: SizedBox(
                   height: 100,
                   width: 200,
-                  child: Center(child: Text("Ошибка получения данных"))),
-            ));
-    controller?.resumeCamera();
-    BlocProvider.of<QRScannerBloc>(context).add(QRScannerCleaningDataEvent());
-  }
-
-  void _showOtherSnackBar() async {
-    controller?.pauseCamera();
-    await showDialog(
-        context: context,
-        builder: (context) => const AlertDialog(
-              content: SizedBox(
-                  height: 100,
-                  width: 200,
-                  child: Center(child: Text("Vse norm"))),
+                  child: Center(child: Text("Неправильный QR код"))),
             ));
     controller?.resumeCamera();
     BlocProvider.of<QRScannerBloc>(context).add(QRScannerCleaningDataEvent());
@@ -193,10 +99,13 @@ class _QRScannerPageState extends State<QRScannerPage> {
     });
     controller.scannedDataStream.listen((scanData) {
       setState(() {
+        controller?.pauseCamera();
         result = scanData;
         logger.info('result: ${result!.code}');
+        logger.info('emit loading:');
         BlocProvider.of<QRScannerBloc>(context)
             .add(QRScannerLoadEvent(data: result!.code!));
+        controller?.resumeCamera();
       });
     });
   }

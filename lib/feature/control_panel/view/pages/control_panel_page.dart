@@ -39,6 +39,7 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
           ),
           body: BlocBuilder<RequestShotBloc, RequestShotState>(
               builder: (context, state) {
+            logger.info('rebuild');
             return Stack(
               children: [tempImage ?? SizedBox(), drawUI(state)],
             );
@@ -66,7 +67,17 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
       );
     } else if (state is RequestShotErrorState) {
       return Center(
-        child: Text(state.message),
+        child: Column(
+          children: [
+            Text(state.message),
+            TextButton(
+                onPressed: () {
+                  BlocProvider.of<RequestShotBloc>(context)
+                      .add(RequestShotClearLoadEvent());
+                },
+                child: Text("Переподключение")),
+          ],
+        ),
       );
     } else {
       return Center(
@@ -76,8 +87,9 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
   }
 
   Future<void> _getDataCycle(ShotEntity previousData) async {
+    logger.info('get new shot');
     Future.delayed(
-        Duration(seconds: 2),
+        Duration(milliseconds: 20),
         () => BlocProvider.of<RequestShotBloc>(context)
             .add(RequestShotLoadWithDataEvent(previousData: previousData)));
   }

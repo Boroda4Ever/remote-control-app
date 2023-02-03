@@ -32,7 +32,12 @@ Future<void> init() async {
         ipDataSource: sl(),
         networkInfo: sl(),
       ));
-  sl.registerLazySingleton<DataStreamSource>(() => DataStreamSourceImpl(
+
+  // sl.registerLazySingleton<DataStreamSource>(() => DataStreamSourceImpl(
+  //       client: sl(),
+  //     ));
+
+  sl.registerLazySingleton<DataStreamSource>(() => TestDataStreamSourceImpl(
         client: sl(),
       ));
   sl.registerLazySingleton<IPDataSource>(() => IPDataSourceImpl(
