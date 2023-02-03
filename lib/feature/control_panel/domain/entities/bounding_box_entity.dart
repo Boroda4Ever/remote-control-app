@@ -11,3 +11,9 @@ class BoundingBoxEntity {
     required this.height,
   });
 }
+// web rtc
+// сокеты
+// web сокеты 
+// сокет ио
+// симлпес дуплекс
+// обработка 
